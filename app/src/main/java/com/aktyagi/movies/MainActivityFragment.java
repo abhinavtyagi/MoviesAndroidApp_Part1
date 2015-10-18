@@ -36,6 +36,13 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ * http://api.themoviedb.org/3/movie/popular?api_key=a16ff5003d5dd8cd309cbb817eba0777
+ * http://api.themoviedb.org/3/movie/top_rated?api_key=a16ff5003d5dd8cd309cbb817eba0777
+ * http://api.themoviedb.org/3/movie/now_playing?api_key=a16ff5003d5dd8cd309cbb817eba0777
+ * http://api.themoviedb.org/3/movie/upcoming?api_key=a16ff5003d5dd8cd309cbb817eba0777
+ */
+
+/**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
