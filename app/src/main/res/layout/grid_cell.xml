@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:padding="1dp"
     >
 
     <ImageView
@@ -14,7 +15,6 @@
         android:maxWidth="100dp"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:src="@drawable/movies"
         android:background="#ff000000"
 
         />
