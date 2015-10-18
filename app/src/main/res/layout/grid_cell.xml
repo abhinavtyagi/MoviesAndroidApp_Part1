@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,23 +8,25 @@
 
     <ImageView
         android:id="@+id/grid_cell_image_view"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:maxHeight="64dp"
-        android:maxWidth="64dp"
-        android:scaleType="centerInside"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:maxHeight="200dp"
+        android:maxWidth="100dp"
+        android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:background="@drawable/movies"
+        android:src="@drawable/movies"
+        android:background="#ff000000"
+
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/grid_cell_textView"
-        android:layout_margin="1dp"
-        android:padding="1dp"
         android:text="SAMPLE"
-        android:background="#fff0f0ff"
+        android:background="#3000FF00"
         android:textAlignment="center"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBottom="@id/grid_cell_image_view"
         />
 
-</LinearLayout>
+</RelativeLayout>
