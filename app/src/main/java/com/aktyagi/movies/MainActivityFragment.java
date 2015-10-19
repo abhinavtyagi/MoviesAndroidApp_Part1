@@ -2,10 +2,14 @@ package com.aktyagi.movies;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Movie;
 import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,11 +51,46 @@ import java.net.URLConnection;
  */
 public class MainActivityFragment extends Fragment {
     private static GridViewAdapter mAdapter = null;
+    private Context mContext;
+    private  String mMoviePreference;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        update();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        mAdapter = new GridViewAdapter(getURLStringBasedOnPreferences());
+    }
+    private String getURLStringBasedOnPreferences() {
+        String strServer = "api.themoviedb.org";
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mMoviePreference = prefs.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_value));
+        Uri.Builder uriBuilder = new Uri.Builder();
+        uriBuilder.scheme("http").authority(strServer).appendPath("3").appendPath("movie").appendPath(mMoviePreference).
+                appendQueryParameter("api_key", "a16ff5003d5dd8cd309cbb817eba0777");
+        String url = uriBuilder.toString();
+        return  url;
+    }
+
+    private void update() {
+        String url = getURLStringBasedOnPreferences();
+        if(mAdapter==null) {
+            mAdapter = new GridViewAdapter(url);
+        } else {
+            MovieDataTaskInput input = new MovieDataTaskInput();
+            input.mStrUrl = url;
+            input.mAdapter = mAdapter;
+            new FetchMoviesTask().execute(input);
+        }
+    }
 
     public MainActivityFragment() {
-        String strURL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a16ff5003d5dd8cd309cbb817eba0777";
-        if(mAdapter==null)
-            mAdapter = new GridViewAdapter(strURL);
+        super();
     }
 
     @Override
@@ -104,7 +143,6 @@ public class MainActivityFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, android.view.ViewGroup parent) {
             ViewHolder viewHolder = null;
-//            ToDo: add code to fetch image using picasso. The data is already in adapter!
 //            if data is not available, populate it using some default image and url (another way is to populate the adapter with default data!)
             MovieData movieData = getData(position);
             if(movieData==null)
@@ -174,8 +212,6 @@ public class MainActivityFragment extends Fragment {
             URL url=null;
             HttpURLConnection urlConnection = null;
             if(isConnected) {
-                //ToDo: use url builder
-                //String strUrl = params[0];
                 try {
                     Log.i(LOG_TAG, "Starting connect etc etc");
                     strUrl = input.mStrUrl;
@@ -242,10 +278,13 @@ public class MainActivityFragment extends Fragment {
             super.onPostExecute(movieDataTaskOutput);
             Assert.assertEquals(movieDataTaskOutput==null, false);
             if(movieDataTaskOutput!=null) {
+                Log.i(LOG_TAG, movieDataTaskOutput.toString());
                 GridViewAdapter adapter = (GridViewAdapter) movieDataTaskOutput.mAdapter;
                 adapter.notifyDataSetInvalidated();
                 adapter.setData(movieDataTaskOutput.movieDataArray);
                 adapter.notifyDataSetChanged();
+//                adapter.refresh(movieDataTaskOutput.movieDataArray);
+
             }
         }
     }

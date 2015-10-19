@@ -48,7 +48,8 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     private void bindPreferencesSummaryToValue(Preference preference) {
         preference.setOnPreferenceChangeListener(this);
         onPreferenceChange(preference,
-                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(),
+                /*default value*/ ""));
     }
 
 
