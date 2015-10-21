@@ -1,7 +1,9 @@
 package com.aktyagi.movies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String user_preference_entry_value = sp.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_value));
+        String[] entries= getResources().getStringArray(R.array.preferences_movie_entries);
+        String[] entryValues = getResources().getStringArray(R.array.preferences_movie_entryValues);
+        int index = 0;
+        for(String s : entryValues) {
+            if(s.equals(user_preference_entry_value)) {
+                user_preference_entry_value = entries[index];
+                break;
+            }
+            index++;
+        }
+
+        setTitle(user_preference_entry_value+" Movies");
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

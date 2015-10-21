@@ -2,6 +2,7 @@ package com.aktyagi.movies;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
 import android.media.Image;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -58,6 +60,20 @@ public class MainActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
         update();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String user_preference_entry_value = sp.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_value));
+        String[] entries= getResources().getStringArray(R.array.preferences_movie_entries);
+        String[] entryValues = getResources().getStringArray(R.array.preferences_movie_entryValues);
+        int index = 0;
+        for(String s : entryValues) {
+            if(s.equals(user_preference_entry_value)) {
+                user_preference_entry_value = entries[index];
+                break;
+            }
+            index++;
+        }
+
+        getActivity().setTitle(user_preference_entry_value + " Movies");
     }
 
     @Override
@@ -97,8 +113,25 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        GridView gridView = (GridView)rootView.findViewById(R.id.mainGridView);
+        final GridView gridView = (GridView)rootView.findViewById(R.id.mainGridView);
         gridView.setAdapter(mAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                GridView gv = gridView;
+                Context context = view.getContext();
+                Intent intent = new Intent(context, DetailActivity.class);
+                MovieData movieData = mAdapter.getData(position);
+                intent.putExtra("zzzz", movieData.original_title);
+                // e.g. http://image.tmdb.org/t/p/w185//pJ5FjCO9X0jhxtQlUGtV0R0P4Bh.jpg
+                intent.putExtra("imgurl", "http://image.tmdb.org/t/p/w185/"+movieData.poster_path);
+                intent.putExtra("synopsis", movieData.overview);
+                intent.putExtra("release_date", movieData.release_date);
+                intent.putExtra("rating", movieData.vote_average);
+
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
@@ -168,7 +201,7 @@ public class MainActivityFragment extends Fragment {
             }
             viewHolder.mTextView.setText(movieData.title);
 
-            String strImgURL = "http://image.tmdb.org/t/p/w185/"+movieData.backdrop_path;
+            String strImgURL = "http://image.tmdb.org/t/p/w185/"+movieData.poster_path;
             //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
             Picasso picasso = Picasso.with(getActivity());
             RequestCreator requestCreator = picasso.load(strImgURL);
@@ -262,6 +295,7 @@ public class MainActivityFragment extends Fragment {
                     movieData.vote_average      = object.getDouble("vote_average");
                     movieData.vote_count        = object.getInt("vote_count");
                     movieData.adult             = object.getBoolean("adult");
+                    movieData.popularity        = object.getDouble("popularity");
                     movieDataArray[i] = movieData;
                 }
                 outData = new MovieDataTaskOutput();
@@ -309,6 +343,7 @@ public class MainActivityFragment extends Fragment {
         public double  vote_average;
         public int     vote_count;
         public boolean adult;
+        public double  popularity;
 
         public MovieData() {
             title = null; original_language = null; backdrop_path = null; poster_path = null;
@@ -318,7 +353,8 @@ public class MainActivityFragment extends Fragment {
 
         public MovieData(String title, String original_title, String backdrop_path,
                          String poster_path, String original_language, String overview,
-                         String release_date, double vote_average, int vote_count, Boolean adult) {
+                         String release_date, double vote_average, int vote_count,
+                         double popularity, Boolean adult) {
             this.title = title;
             this.original_title = original_title;
             this.backdrop_path = backdrop_path;
@@ -329,6 +365,7 @@ public class MainActivityFragment extends Fragment {
             this.vote_average = vote_average;
             this.vote_count = vote_count;
             this.adult = adult;
+            this.popularity = popularity;
         }
     }
 }
