@@ -4,7 +4,7 @@
         android:key="@string/preferences_movie_key"
         android:entries="@array/preferences_movie_entries"
         android:entryValues="@array/preferences_movie_entryValues"
-        android:defaultValue="@string/preferences_movie_default_value"
+        android:defaultValue="@string/preferences_movie_default_entry"
         android:summary="Summary"
         />
 </PreferenceScreen>

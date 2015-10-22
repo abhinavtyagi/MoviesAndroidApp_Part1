@@ -6,7 +6,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:showIn="@layout/activity_detail"
     tools:context="com.aktyagi.movies.DetailActivityFragment"
     android:orientation="vertical"
-    android:background="#FF000000"
+    android:background="#FF0f0f0f"
     >
 
     <TextView
@@ -28,15 +28,26 @@
         android:src="@drawable/movies"
         android:layout_weight="10"/>
 
-    <TextView
-        android:id="@+id/detail_fragment_text_view_synopsis"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Synopsis"
-        android:textColor="#FFFFFFFF"
-        android:gravity="center"
-        android:padding="10dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:scrollbars="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/detail_fragment_text_view_synopsis"
+                android:text="Synopsis"
+                android:textColor="#FFFFFFFF"
+                android:gravity="center"
+                android:scrollIndicators="right"
+                android:fadeScrollbars="true"/>
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/detail_fragment_text_view_user_rating"
@@ -45,7 +56,8 @@
         android:layout_weight="1"
         android:text="rating"
         android:textColor="#FFFFFFFF"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/detail_fragment_text_view_release_date"
@@ -54,7 +66,9 @@
         android:layout_weight="1"
         android:text="date"
         android:textColor="#FFFFFFFF"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textAlignment="center"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
 

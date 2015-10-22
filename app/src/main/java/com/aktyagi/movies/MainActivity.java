@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String user_preference_entry_value = sp.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_value));
+        String user_preference_entry_value = sp.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_entryValue));
         String[] entries= getResources().getStringArray(R.array.preferences_movie_entries);
         String[] entryValues = getResources().getStringArray(R.array.preferences_movie_entryValues);
         int index = 0;

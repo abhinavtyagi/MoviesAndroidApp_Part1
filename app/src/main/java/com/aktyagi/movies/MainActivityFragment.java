@@ -61,7 +61,7 @@ public class MainActivityFragment extends Fragment {
         super.onStart();
         update();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String user_preference_entry_value = sp.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_value));
+        String user_preference_entry_value = sp.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_entryValue));
         String[] entries= getResources().getStringArray(R.array.preferences_movie_entries);
         String[] entryValues = getResources().getStringArray(R.array.preferences_movie_entryValues);
         int index = 0;
@@ -80,16 +80,17 @@ public class MainActivityFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mAdapter = new GridViewAdapter(getURLStringBasedOnPreferences());
+        String strURL = getURLStringBasedOnPreferences();
+        mAdapter = new GridViewAdapter(strURL);
     }
     private String getURLStringBasedOnPreferences() {
         String strServer = "api.themoviedb.org";
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mMoviePreference = prefs.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_value));
+        mMoviePreference = prefs.getString(getString(R.string.preferences_movie_key), getString(R.string.preferences_movie_default_entryValue));
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("http").authority(strServer).appendPath("3").appendPath("movie").appendPath(mMoviePreference).
                 appendQueryParameter("api_key", "a16ff5003d5dd8cd309cbb817eba0777");
-        String url = uriBuilder.toString();
+        String url = uriBuilder.toString().toLowerCase();
         return  url;
     }
 
@@ -238,8 +239,8 @@ public class MainActivityFragment extends Fragment {
             Context context = getActivity();
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            isConnected = activeNetworkInfo.isConnected();
-            Assert.assertEquals(isConnected, true);
+            isConnected = (activeNetworkInfo!=null) ? activeNetworkInfo.isConnected() : false;
+            Assert.assertEquals(activeNetworkInfo==null || isConnected, true);
             String jsonData = null;
             String strUrl = null;
             URL url=null;
@@ -310,7 +311,7 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(MovieDataTaskOutput movieDataTaskOutput) {
             super.onPostExecute(movieDataTaskOutput);
-            Assert.assertEquals(movieDataTaskOutput==null, false);
+//            Assert.assertEquals(movieDataTaskOutput==null, false);
             if(movieDataTaskOutput!=null) {
                 Log.i(LOG_TAG, movieDataTaskOutput.toString());
                 GridViewAdapter adapter = (GridViewAdapter) movieDataTaskOutput.mAdapter;

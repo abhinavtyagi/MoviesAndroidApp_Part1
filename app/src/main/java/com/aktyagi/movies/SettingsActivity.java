@@ -62,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             if(prefIdx>=0) {
                 preference.setSummary(listPreference.getEntries()[prefIdx]);
             } else {
-                preference.setSummary("Unknown");
+                preference.setSummary(R.string.preferences_movie_default_entry);
             }
             return true;
         }
