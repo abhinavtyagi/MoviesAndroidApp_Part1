@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:showIn="@layout/activity_detail"
+    tools:context="com.aktyagi.movies.DetailActivityFragment"
+    android:orientation="horizontal"
+    android:background="#FF0f0f0f"
+    >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/detail_fragment_img_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/movies"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/detail_fragment_text_view_title"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAlignment="viewStart"
+            android:text="title"
+            android:textColor="#FFFFFFFF"
+            android:gravity="center"
+            android:paddingLeft="10dp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:scrollbars="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:paddingRight="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/detail_fragment_text_view_synopsis"
+                    android:text="a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a "
+                    android:textColor="#FFFFFFFF"
+                    android:gravity="left"
+                    android:textAlignment="viewStart"
+                    android:scrollIndicators="right"
+                    android:fadeScrollbars="true"/>
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+            <TextView
+                android:paddingLeft="10dp"
+                android:id="@+id/detail_fragment_text_view_user_rating"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="rating"
+                android:textColor="#FFFFFFFF"
+                android:gravity="left"
+                android:textAlignment="viewStart"/>
+            <TextView
+                android:paddingLeft="10dp"
+                android:id="@+id/detail_fragment_text_view_release_date"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="date"
+                android:textColor="#FFFFFFFF"
+                android:gravity="left"
+                android:textAlignment="viewStart"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
+
