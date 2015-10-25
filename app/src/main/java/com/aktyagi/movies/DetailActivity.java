@@ -25,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        String strIntentExtra = intent.getStringExtra("zzzz");
+        String strIntentExtra = intent.getStringExtra("original_title");
         textView.setText(strIntentExtra);
 
         String strPosterURL = intent.getStringExtra("imgurl");

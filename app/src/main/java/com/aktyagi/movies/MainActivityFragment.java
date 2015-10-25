@@ -125,9 +125,15 @@ public class MainActivityFragment extends Fragment {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, DetailActivity.class);
                 MovieData movieData = mAdapter.getData(position);
-                intent.putExtra("zzzz", movieData.original_title);
+                intent.putExtra("original_title", movieData.original_title);
                 // e.g. http://image.tmdb.org/t/p/w185//pJ5FjCO9X0jhxtQlUGtV0R0P4Bh.jpg
-                intent.putExtra("imgurl", "http://image.tmdb.org/t/p/w185/"+movieData.poster_path);
+                String strImgUrl = null;
+                if(movieData.poster_path!=null && movieData.poster_path.equals("null")==false) {
+                    strImgUrl = "http://image.tmdb.org/t/p/w185/"+movieData.poster_path;
+                } else {
+                    strImgUrl = getString(R.string.fallback_image_path);
+                }
+                intent.putExtra("imgurl", strImgUrl);
                 intent.putExtra("synopsis", movieData.overview);
                 intent.putExtra("release_date", movieData.release_date);
                 intent.putExtra("rating", movieData.vote_average);
@@ -204,11 +210,19 @@ public class MainActivityFragment extends Fragment {
             }
             viewHolder.mTextView.setText(movieData.title);
 
-            String strImgURL = "http://image.tmdb.org/t/p/w185/"+movieData.poster_path;
-            //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
             Picasso picasso = Picasso.with(getActivity());
-            RequestCreator requestCreator = picasso.load(strImgURL);
-            requestCreator.into(viewHolder.mImageView);
+            RequestCreator requestCreator = null;
+
+            String strImgURL = null;
+            if(movieData.poster_path!=null && movieData.poster_path.equals("null")==false) {
+                strImgURL = "http://image.tmdb.org/t/p/w185/" + movieData.poster_path;
+            } else if(movieData.backdrop_path!=null && movieData.backdrop_path.equals("null")==false) {
+                strImgURL = "http://image.tmdb.org/t/p/w185/" + movieData.backdrop_path;
+            } else {
+                strImgURL = getString(R.string.fallback_image_path);
+            }
+            requestCreator = picasso.load(strImgURL);
+            requestCreator.error(R.drawable.movies).into(viewHolder.mImageView);
             return convertView;
         }
 
@@ -249,7 +263,7 @@ public class MainActivityFragment extends Fragment {
             HttpURLConnection urlConnection = null;
             if(isConnected) {
                 try {
-                    Log.i(LOG_TAG, "Starting connect etc etc");
+                    Log.i(LOG_TAG, "Starting connect etc etc; URL="+input.mStrUrl);
                     strUrl = input.mStrUrl;
                     url = new URL(strUrl);
                     urlConnection = (HttpURLConnection) url.openConnection();
@@ -300,6 +314,7 @@ public class MainActivityFragment extends Fragment {
                     movieData.vote_count        = object.getInt("vote_count");
                     movieData.adult             = object.getBoolean("adult");
                     movieData.popularity        = object.getDouble("popularity");
+                    Log.i(LOG_TAG, "Parsed"+i+"th object; objectvalue="+movieData.toString());
                     movieDataArray[i] = movieData;
                 }
                 outData = new MovieDataTaskOutput();
@@ -307,6 +322,8 @@ public class MainActivityFragment extends Fragment {
                 outData.mAdapter = adapter;
             } catch (JSONException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "message: "+e.getMessage()+"\n"+"stack trace: \n"+e.getStackTrace());
             }
             return outData;
         }
@@ -314,15 +331,12 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(MovieDataTaskOutput movieDataTaskOutput) {
             super.onPostExecute(movieDataTaskOutput);
-//            Assert.assertEquals(movieDataTaskOutput==null, false);
             if(movieDataTaskOutput!=null) {
-                Log.i(LOG_TAG, movieDataTaskOutput.toString());
+                Log.i(LOG_TAG,"onPostExecute adapterData:"+ movieDataTaskOutput.toString());
                 GridViewAdapter adapter = (GridViewAdapter) movieDataTaskOutput.mAdapter;
                 adapter.notifyDataSetInvalidated();
                 adapter.setData(movieDataTaskOutput.movieDataArray);
                 adapter.notifyDataSetChanged();
-//                adapter.refresh(movieDataTaskOutput.movieDataArray);
-
             }
         }
     }

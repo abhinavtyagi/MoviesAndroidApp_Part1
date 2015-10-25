@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:id="@+id/grid_cell_textView"
         android:text="SAMPLE"
-        android:background="#30505050"
+        android:background="#90505050"
         android:textAlignment="center"
         android:textColor="#FFFFFFFF"
         android:layout_alignBottom="@id/grid_cell_image_view"
